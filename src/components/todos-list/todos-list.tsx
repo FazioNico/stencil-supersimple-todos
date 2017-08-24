@@ -15,10 +15,10 @@ interface Todo {
 }
 
 @Component({
-  tag: 'my-name',
-  styleUrl: 'my-name.scss'
+  tag: 'todos-list',
+  styleUrl: 'todos-list.scss'
 })
-export class MyName {
+export class TodosList {
 
   @Prop() first:string;
   @Prop() last:string;
