@@ -1,0 +1,25 @@
+{
+  "name": "stencil-supersimple-todos",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Super simple todos list to explore Stencil JS features.",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "stencil build",
+    "dev": "sd concurrent \"stencil build --dev --watch\" \"stencil-dev-server\" ",
+    "serve": "stencil-dev-server",
+    "start": "npm run dev"
+  },
+  "dependencies": {
+    "@stencil/core": "next",
+    "@stencil/router": "0.0.4"
+  },
+  "devDependencies": {
+    "@stencil/dev-server": "latest",
+    "@stencil/utils": "latest"
+  },
+  "author": "Nicolas Fazio",
+  "license": "MIT"
+}
