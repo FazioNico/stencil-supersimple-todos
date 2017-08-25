@@ -6,7 +6,7 @@
  * @Last modified time: 24-08-2017
  */
 
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Prop, State, Listen } from '@stencil/core';
 
 interface Todo {
     _id:string;
@@ -14,15 +14,24 @@ interface Todo {
     complete:boolean;
 }
 
+interface InputKeyEvent extends KeyboardEvent {
+  target: EventTarget & { value: string }
+}
+
+
 @Component({
   tag: 'todos-list',
   styleUrl: 'todos-list.scss'
 })
 export class TodosList {
 
-  @Prop() first:string;
-  @Prop() last:string;
-  @State() todos:Todo[];
+  @Prop() first:string
+  @Prop() last:string
+  @State() todos:Todo[]
+
+  @Listen('todoCompleted') todoCompletedHandler(event: CustomEvent) {
+    this.handleClick(event.detail);
+  }
 
   constructor(){
     this.todos = [
@@ -33,12 +42,13 @@ export class TodosList {
 
   handleClick(todoChanged:Todo):void {
     this.todos = this.todos.map((todo:Todo) => {
-       (todo._id === todoChanged._id) ? todo.complete = !todo.complete : null;
-       return todo
+        (todo._id === todoChanged._id) ? todo.complete = !todo.complete : null
+        return todo
     })
+    console.log(this.todos)
   }
 
-  handleKeyPress(event:any):void {
+  handleKeyPress(event:InputKeyEvent):void {
     if(event.keyCode !== 13){
       return
     }
@@ -49,9 +59,10 @@ export class TodosList {
 
   render():JSX.Element {
 
-    const TODO_LIST:JSX.Element = this.todos.map((todo:Todo)=>{
+    const TODO_LIST:JSX.Element = this.todos.map((item:Todo)=>{
       return (
-        (todo.complete)? <li onClick={ _ => this.handleClick(todo)} class="complete">{todo.desc}</li> : <li onClick={ _ => this.handleClick(todo)}>{todo.desc}</li>
+        <todo-item todo={item}/>
+        //(todo.complete)? <li onClick={ _ => this.handleClick(todo)} class="complete">{todo.desc}</li> : <li onClick={ _ => this.handleClick(todo)}>{todo.desc}</li>
       )
     });
 
@@ -65,7 +76,7 @@ export class TodosList {
 
       <div>
         <input
-          onKeyPress={ (event: UIEvent) => this.handleKeyPress(event)}
+          onKeyPress={ (event: InputKeyEvent) => this.handleKeyPress(event)}
           placeholder="add new todo..."/>
       </div>
 
