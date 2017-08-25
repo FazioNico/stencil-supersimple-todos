@@ -41,11 +41,16 @@ export class TodosList {
   }
 
   handleClick(todoChanged:Todo):void {
-    this.todos = this.todos.map((todo:Todo) => {
+    // create new const with each element of this.todos Array (use ES6 is same as .concat())
+    const updatedTodos = [...this.todos]
+    // update todo by id
+    updatedTodos.map((todo:Todo) => {
         (todo._id === todoChanged._id) ? todo.complete = !todo.complete : null
         return todo
     })
-    console.log(this.todos)
+    // update this.todos to re-render and update view...
+    console.log('Bug: todos list is updated before reassign-> ', this.todos)
+    this.todos = updatedTodos
   }
 
   handleKeyPress(event:InputKeyEvent):void {
