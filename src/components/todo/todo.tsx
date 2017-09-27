@@ -6,7 +6,7 @@
  * @Last modified time: 24-08-2017
  */
 
-import { Component, Prop, PropWillChange, Event, EventEmitter } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter } from '@stencil/core';
 
 interface ITodo {
     _id:string;
@@ -22,11 +22,6 @@ interface ITodo {
 export class Todo {
 
   @Prop() todo:ITodo;
-  // @PropWillChange('todo')
-  // willChangeHandler(newValue: ITodo) {
-  //   console.log('The new value of todo is: ', newValue);
-  //   //this.todo = newValue
-  // }
 
   @Event() todoCompleted: EventEmitter;
   handleClick():void {
@@ -34,10 +29,11 @@ export class Todo {
   }
 
   render():JSX.Element {
-    console.log('todo-item', this.todo)
-    return (
-      (this.todo.complete)? <li onClick={ _ => this.handleClick()} class="complete">{this.todo.desc}</li> : <li onClick={ _ => this.handleClick()}>{this.todo.desc}</li>
-    )
+    if(this.todo) {
+      return (
+        (this.todo.complete)? <li onClick={ _ => this.handleClick()} class="complete">{this.todo.desc}</li> : <li onClick={ _ => this.handleClick()}>{this.todo.desc}</li>
+      )
+    }
   }
 
 }

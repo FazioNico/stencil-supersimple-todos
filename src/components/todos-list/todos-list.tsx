@@ -8,7 +8,7 @@
 
 import { Component, Prop, State, Listen } from '@stencil/core';
 
-interface Todo {
+interface ITodo {
     _id:string;
     desc:string;
     complete:boolean;
@@ -27,7 +27,7 @@ export class TodosList {
 
   @Prop() first:string
   @Prop() last:string
-  @State() todos:Todo[]
+  @State() todos:ITodo[]
 
   @Listen('todoCompleted') todoCompletedHandler(event: CustomEvent) {
     this.handleClick(event.detail);
@@ -40,17 +40,16 @@ export class TodosList {
     ]
   }
 
-  handleClick(todoChanged:Todo):void {
-    // create new const with each element of this.todos Array (use ES6 is same as .concat())
-    const updatedTodos = [...this.todos]
-    // update todo by id
-    updatedTodos.map((todo:Todo) => {
-        (todo._id === todoChanged._id) ? todo.complete = !todo.complete : null
-        return todo
-    })
-    // update this.todos to re-render and update view...
-    console.log('Bug: todos list is updated before reassign-> ', this.todos)
-    this.todos = updatedTodos
+  handleClick(todoChanged:ITodo):void {
+    // update todo ...
+    todoChanged.complete = !todoChanged.complete;
+    // assign new todo[] to this.todos
+    this.todos = [
+      // extract all unchanged todos
+      ...this.todos.filter(t=>t._id !== todoChanged._id),
+      // add changed todo
+      todoChanged
+    ]
   }
 
   handleKeyPress(event:InputKeyEvent):void {
@@ -63,13 +62,6 @@ export class TodosList {
   }
 
   render():JSX.Element {
-
-    const TODO_LIST:JSX.Element = this.todos.map((item:Todo)=>{
-      return (
-        <todo-item todo={item}/>
-        //(todo.complete)? <li onClick={ _ => this.handleClick(todo)} class="complete">{todo.desc}</li> : <li onClick={ _ => this.handleClick(todo)}>{todo.desc}</li>
-      )
-    });
 
     return (
       <div>
@@ -87,7 +79,11 @@ export class TodosList {
 
       </div>
         <ul>
-          {TODO_LIST}
+          {
+            this.todos.map((item:ITodo)=>{
+                return <todo-item todo={item}/>
+            })
+          }
         </ul>
       </div>
 
