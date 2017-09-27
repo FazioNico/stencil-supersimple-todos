@@ -80,9 +80,7 @@ export class TodosList {
       </div>
         <ul>
           {
-            this.todos.map((item:ITodo)=>{
-                return <todo-item todo={item}/>
-            })
+            this.todos.map((item:ITodo)=> <todo-item todo={item}/>)
           }
         </ul>
       </div>
